@@ -7,8 +7,10 @@ const mongoose = require('mongoose');
 const config = require('./DB.js');
 const recipeRoute = require('./recipe.route');
 
+const url = process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME;
+
 mongoose.Promise = global.Promise;
-mongoose.connect('process.env.OPENSHIFT_MONGODB_DB_URL', { useNewUrlParser: true }).then(
+mongoose.connect(url.toString(), { useNewUrlParser: true }).then(
   () => {console.log('Database is connected') },
   err => { console.log('Can not connect to the database'+ err)}
 );
