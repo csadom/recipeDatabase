@@ -7,6 +7,10 @@ const mongoose = require('mongoose');
 const config = require('./DB.js');
 const recipeRoute = require('./recipe.route');
 
+var port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080;
+var ip = process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '0.0.0.0';
+
+
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
   () => {console.log('Database is connected') },
@@ -23,6 +27,6 @@ app.use(bodyParser.json());
 
 app.use('/recipe', recipeRoute);
 
-app.listen(PORT, function(){
+app.listen(port, ip, function(){
   console.log('Server is running on Port:',PORT);
 });
