@@ -53,7 +53,8 @@ recipeRoutes.route('/update/:id').post(function (req, res) {
         recipe.technika = req.body.technika;
         recipe.hozzavalok = req.body.hozzavalok;
         recipe.elkeszites = req.body.elkeszites;
-		recipe.file = req.body.file;
+		recipe.fileUrl = req.body.fileUrl;
+		recipe.fileID = req.body.fileID;
 
         recipe.save().then(recipe => {
           res.json('Update complete');
