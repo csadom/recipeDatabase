@@ -2,10 +2,12 @@ const express = require('express');
 const recipeRoutes = express.Router();
 var passwordHash = require('password-hash');
 
+var sha256 = require('js-sha256');
+
 // Require Recipe model in our routes module
 let Recipe = require('./recipe.model');
 const userPsw = new Map();
-userPsw.set('orsi','sha1$9f31a79d$1$1c69e555abfad0b40607c79ad804b16da33e63bf');
+userPsw.set('orsi','bbe7c9d4c4bc2326e3e6b9ee0bd7b555122ace1fa83bfee955e5c6305ee81844');
 var TokenGenerator = require( 'token-generator' )({
         salt: 'recipedb',
 		timestampMap: '1904192135'
@@ -20,11 +22,11 @@ recipeRoutes.route('/login').post(function (req, res) {
 	 const psw = req.body.psw;
 	 console.log(psw);
 	 
-	 const genHash = passwordHash.generate(psw);
+	 const genHash =  sha256(psw);
 	 const origHash =  userPsw.get(user);
 	 console.log(genHash);
 	 console.log(origHash);
-	if(passwordHash.verify(genHash, origHash)){
+	if(genHash.localeCompare(origHash) === 0)){
 		var token = TokenGenerator.generate();
 		res.status(200).json({'token': token});
 		console.log("WW");
