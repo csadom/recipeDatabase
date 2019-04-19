@@ -12,7 +12,7 @@ var TokenGenerator = require( 'token-generator' )({
     });
 	
 // Login
-recipeRoutes.route('/login').get(function (req, res) {
+recipeRoutes.route('/login').post(function (req, res) {
 
 	console.log(req.body);
 	const user = req.body.user;
