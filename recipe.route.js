@@ -19,11 +19,16 @@ recipeRoutes.route('/login').post(function (req, res) {
 	 console.log(user);
 	 const psw = req.body.psw;
 	 console.log(psw);
-	if(passwordHash.verify(passwordHash.generate(psw), userPsw.get(user))){
+	 
+	 const genHash = passwordHash.generate(psw);
+	 const origHash =  userPsw.get(user);
+	if(passwordHash.verify(genHash, origHash)){
 		var token = TokenGenerator.generate();
 		res.status(200).json({'token': token});
+		console.log("WW");
 	}else{
-		res.status(400).json({'error': 'wrong user or psw'});
+		res.status(401).json({'error': 'wrong user or psw'});
+		console.log("EE");
 	}
 
 	
