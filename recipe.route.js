@@ -26,7 +26,7 @@ recipeRoutes.route('/login').post(function (req, res) {
 	 const origHash =  userPsw.get(user);
 	 console.log(genHash);
 	 console.log(origHash);
-	if(genHash.localeCompare(origHash) === 0)){
+	if(genHash.localeCompare(origHash) === 0){
 		var token = TokenGenerator.generate();
 		res.status(200).json({'token': token});
 		console.log("WW");
