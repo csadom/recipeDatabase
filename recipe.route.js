@@ -1,8 +1,33 @@
 const express = require('express');
 const recipeRoutes = express.Router();
+var passwordHash = require('password-hash');
 
 // Require Recipe model in our routes module
 let Recipe = require('./recipe.model');
+const userPsw = new Map();
+userPsw.set('orsi','sha1$9f31a79d$1$1c69e555abfad0b40607c79ad804b16da33e63bf');
+var TokenGenerator = require( 'token-generator' )({
+        salt: 'recipedb'
+    });
+	
+// Login
+recipeRoutes.route('/login').get(function (req, res) {
+
+console.log(req.body);
+	const user = req.body.user;
+	 console.log(user);
+	 const psw = req.body.psw;
+	 console.log(psw);
+	if(passwordHash.verify(passwordHash.generate(psw), userPsw.get(user)){
+		var token = TokenGenerator.generate();
+		res.status(200).json({'token': token});
+	}else{
+		res.status(400).json({'error': 'wrong user or psw'});
+	}
+
+	
+  });
+});
 
 // Defined store route
 recipeRoutes.route('/add').post(function (req, res) {

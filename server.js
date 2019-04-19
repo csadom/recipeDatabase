@@ -7,6 +7,9 @@ const mongoose = require('mongoose');
 const config = require('./DB.js');
 const recipeRoute = require('./recipe.route');
 
+
+
+
 var port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080;
 var ip = process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '0.0.0.0';
 
