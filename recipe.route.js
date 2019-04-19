@@ -7,18 +7,19 @@ let Recipe = require('./recipe.model');
 const userPsw = new Map();
 userPsw.set('orsi','sha1$9f31a79d$1$1c69e555abfad0b40607c79ad804b16da33e63bf');
 var TokenGenerator = require( 'token-generator' )({
-        salt: 'recipedb'
+        salt: 'recipedb',
+		timestampMap: '1904192135'
     });
 	
 // Login
 recipeRoutes.route('/login').get(function (req, res) {
 
-console.log(req.body);
+	console.log(req.body);
 	const user = req.body.user;
 	 console.log(user);
 	 const psw = req.body.psw;
 	 console.log(psw);
-	if(passwordHash.verify(passwordHash.generate(psw), userPsw.get(user)){
+	if(passwordHash.verify(passwordHash.generate(psw), userPsw.get(user))){
 		var token = TokenGenerator.generate();
 		res.status(200).json({'token': token});
 	}else{
@@ -27,7 +28,7 @@ console.log(req.body);
 
 	
   });
-});
+
 
 // Defined store route
 recipeRoutes.route('/add').post(function (req, res) {
