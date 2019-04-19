@@ -22,6 +22,8 @@ recipeRoutes.route('/login').post(function (req, res) {
 	 
 	 const genHash = passwordHash.generate(psw);
 	 const origHash =  userPsw.get(user);
+	 console.log(genHash);
+	 console.log(origHash);
 	if(passwordHash.verify(genHash, origHash)){
 		var token = TokenGenerator.generate();
 		res.status(200).json({'token': token});
