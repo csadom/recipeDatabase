@@ -18,6 +18,7 @@ recipeRoutes.route('/login').post(function (req, res) {
 		var token = TokenGenerator.generate();
 		tokens.set(req.body.user,token);
 		res.status(200).json({'token': token});
+		console.log(token);
 	}else{
 		res.status(401).json({'error': 'wrong user or psw'});
 	}
@@ -25,6 +26,12 @@ recipeRoutes.route('/login').post(function (req, res) {
   
 //Validate token
 recipeRoutes.route('/token').post(function (req, res) {
+	
+        console.log(req.body.token);
+		
+        console.log(req.body.user);
+        console.log(tokens.get(req.body.user));
+        console.log("1");
 	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(200).json({'valide': true});
 	}else{
