@@ -1,13 +1,12 @@
 const express = require('express');
 const recipeRoutes = express.Router();
-var passwordHash = require('password-hash');
-
 var sha256 = require('js-sha256');
 
 // Require Recipe model in our routes module
 let Recipe = require('./recipe.model');
 const userPsw = new Map();
 userPsw.set('orsi','bbe7c9d4c4bc2326e3e6b9ee0bd7b555122ace1fa83bfee955e5c6305ee81844');
+const tokens = new Map();
 var TokenGenerator = require( 'token-generator' )({
         salt: 'recipedb',
 		timestampMap: '1904192135'
@@ -15,27 +14,22 @@ var TokenGenerator = require( 'token-generator' )({
 	
 // Login
 recipeRoutes.route('/login').post(function (req, res) {
-
-	console.log(req.body);
-	const user = req.body.user;
-	 console.log(user);
-	 const psw = req.body.psw;
-	 console.log(psw);
-	 
-	 const genHash =  sha256(psw);
-	 const origHash =  userPsw.get(user);
-	 console.log(genHash);
-	 console.log(origHash);
-	if(genHash.localeCompare(origHash) === 0){
+	if(sha256(req.body.psw).localeCompare(userPsw.get(req.body.user)) === 0){
 		var token = TokenGenerator.generate();
+		tokens.set(req.body.user,token);
 		res.status(200).json({'token': token});
-		console.log("WW");
 	}else{
 		res.status(401).json({'error': 'wrong user or psw'});
-		console.log("EE");
 	}
-
-	
+  });
+  
+//Validate token
+recipeRoutes.route('/token').post(function (req, res) {
+	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
+		res.status(200).json({'valide': true});
+	}else{
+		res.status(401).json({'valide': false});
+	}
   });
 
 
