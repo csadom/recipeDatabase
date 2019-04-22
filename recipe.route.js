@@ -39,7 +39,20 @@ recipeRoutes.route('/add').post(function (req, res) {
 	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
-  let recipe = new Recipe(req.body);
+  let recipe = new Recipe();
+  recipe.receptCim = req.body.receptCim;
+        recipe.elkeszitesiIdo = req.body.elkeszitesiIdo;
+        recipe.kaloria = req.body.kaloria;
+        recipe.evszak = req.body.evszak;
+        recipe.unnep = req.body.unnep;
+        recipe.dieta = req.body.dieta;
+        recipe.menu = req.body.menu;
+        recipe.napszak = req.body.napszak;
+        recipe.technika = req.body.technika;
+        recipe.hozzavalok = req.body.hozzavalok;
+        recipe.elkeszites = req.body.elkeszites;
+		recipe.fileUrl = req.body.fileUrl;
+		recipe.fileID = req.body.fileID;
   recipe.save()
     .then(recipe => {
       res.status(200).json({'recipe': 'recipe in added successfully'});
