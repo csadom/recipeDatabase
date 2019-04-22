@@ -36,7 +36,7 @@ recipeRoutes.route('/login').post(function (req, res) {
   
 //Validate token
 recipeRoutes.route('/token').post(function (req, res) {
-	if(isValidToken(token,tokens.get(req.body.user))){
+	if(isValidToken(req.body.token,tokens.get(req.body.user))){
 		res.status(200).json({'valide': true});
 	}else{
 		res.status(401).json({'valide': false});
