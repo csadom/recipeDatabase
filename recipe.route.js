@@ -12,13 +12,20 @@ var TokenGenerator = require( 'token-generator' )({
 		timestampMap: '1904192135'
     });
 	
+var isValidToken = function (user, token) {
+	if(token.localeCompare(tokens.get(user)) === 0){
+		return true;
+	}else{
+		return false;
+	}
+	};
+	
 // Login
 recipeRoutes.route('/login').post(function (req, res) {
 	if(sha256(req.body.psw).localeCompare(userPsw.get(req.body.user)) === 0){
 		var token = TokenGenerator.generate();
 		tokens.set(req.body.user,token);
 		res.status(200).json({'token': token});
-		console.log(token);
 	}else{
 		res.status(401).json({'error': 'wrong user or psw'});
 	}
@@ -26,13 +33,7 @@ recipeRoutes.route('/login').post(function (req, res) {
   
 //Validate token
 recipeRoutes.route('/token').post(function (req, res) {
-	
-        console.log(req.body.token);
-		
-        console.log(req.body.user);
-        console.log(tokens.get(req.body.user));
-        console.log("1");
-	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
+	if(isValidToken(token,tokens.get(req.body.user))){
 		res.status(200).json({'valide': true});
 	}else{
 		res.status(401).json({'valide': false});
@@ -42,6 +43,9 @@ recipeRoutes.route('/token').post(function (req, res) {
 
 // Defined store route
 recipeRoutes.route('/add').post(function (req, res) {
+	if(isValidToken){
+		res.status(401).send("auth error");
+	}else{
   let recipe = new Recipe(req.body);
   recipe.save()
     .then(recipe => {
@@ -50,10 +54,14 @@ recipeRoutes.route('/add').post(function (req, res) {
     .catch(err => {
     res.status(400).send("unable to save to database");
     });
+	}
 });
 
 // Defined get data(index or listing) route
 recipeRoutes.route('/').get(function (req, res) {
+	if(isValidToken){
+		res.status(401).send("auth error");
+	}else{
     Recipe.find(function(err, recipes){
     if(err){
       console.log(err);
@@ -61,19 +69,28 @@ recipeRoutes.route('/').get(function (req, res) {
     else {
       res.json(recipes);
     }
+	
   });
+	}
 });
 
 // Defined edit route
 recipeRoutes.route('/edit/:id').get(function (req, res) {
+	if(isValidToken){
+		res.status(401).send("auth error");
+	}else{
   let id = req.params.id;
   Recipe.findById(id, function (err, recipe){
       res.json(recipe);
   });
+	}
 });
 
 //  Defined update route
 recipeRoutes.route('/update/:id').post(function (req, res) {
+	if(isValidToken){
+		res.status(401).send("auth error");
+	}else{
     Recipe.findById(req.params.id, function(err, recipe) {
     if (!recipe)
       res.status(404).send("data is not found");
@@ -99,7 +116,9 @@ recipeRoutes.route('/update/:id').post(function (req, res) {
             res.status(400).send("unable to update the database");
       });
     }
+	
   });
+	}
 });
 
 // Defined delete | remove | destroy route
