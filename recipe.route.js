@@ -36,6 +36,8 @@ recipeRoutes.route('/token').post(function (req, res) {
 
 // Defined store route
 recipeRoutes.route('/add').post(function (req, res) {
+	console.log(req.body.token);
+	console.log(req.body.user);
 	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
