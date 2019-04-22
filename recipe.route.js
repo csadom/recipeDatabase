@@ -36,7 +36,7 @@ recipeRoutes.route('/login').post(function (req, res) {
   
 //Validate token
 recipeRoutes.route('/token').post(function (req, res) {
-	if(isValidToken(req.body.token,tokens.get(req.body.user))){
+	if(isValidToken(req.body.user,req.body.token)){
 		res.status(200).json({'valide': true});
 	}else{
 		res.status(401).json({'valide': false});
@@ -46,7 +46,7 @@ recipeRoutes.route('/token').post(function (req, res) {
 
 // Defined store route
 recipeRoutes.route('/add').post(function (req, res) {
-	if(isValidToken){
+	if(isValidToken(req.body.user,req.body.token)){
 		res.status(401).send("auth error");
 	}else{
   let recipe = new Recipe(req.body);
@@ -62,7 +62,7 @@ recipeRoutes.route('/add').post(function (req, res) {
 
 // Defined get data(index or listing) route
 recipeRoutes.route('/').get(function (req, res) {
-	if(isValidToken){
+	if(isValidToken(req.body.user,req.body.token)){
 		res.status(401).send("auth error");
 	}else{
     Recipe.find(function(err, recipes){
@@ -79,7 +79,7 @@ recipeRoutes.route('/').get(function (req, res) {
 
 // Defined edit route
 recipeRoutes.route('/edit/:id').get(function (req, res) {
-	if(isValidToken){
+	if(isValidToken(req.body.user,req.body.token)){
 		res.status(401).send("auth error");
 	}else{
   let id = req.params.id;
@@ -91,7 +91,7 @@ recipeRoutes.route('/edit/:id').get(function (req, res) {
 
 //  Defined update route
 recipeRoutes.route('/update/:id').post(function (req, res) {
-	if(isValidToken){
+	if(isValidToken(req.body.user,req.body.token)){
 		res.status(401).send("auth error");
 	}else{
     Recipe.findById(req.params.id, function(err, recipe) {
@@ -126,10 +126,14 @@ recipeRoutes.route('/update/:id').post(function (req, res) {
 
 // Defined delete | remove | destroy route
 recipeRoutes.route('/delete/:id').get(function (req, res) {
+	if(isValidToken(req.body.user,req.body.token)){
+		res.status(401).send("auth error");
+	}else{
     Recipe.findByIdAndRemove({_id: req.params.id}, function(err, recipe){
         if(err) res.json(err);
         else res.json('Successfully removed');
     });
+	}
 });
 
 module.exports = recipeRoutes;
