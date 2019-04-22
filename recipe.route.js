@@ -13,6 +13,9 @@ var TokenGenerator = require( 'token-generator' )({
     });
 	
 var isValidToken = function (user, token) {
+	console.log(user);
+	console.log(token);
+	console.log(tokens.get(user));
 	if(token.localeCompare(tokens.get(user)) === 0){
 		return true;
 	}else{
