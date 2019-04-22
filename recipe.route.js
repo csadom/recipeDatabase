@@ -38,23 +38,11 @@ recipeRoutes.route('/token').post(function (req, res) {
 recipeRoutes.route('/add').post(function (req, res) {
 	console.log(req.body.token);
 	console.log(req.body.user);
-	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
+	console.log(tokens.get(req.body.user));
+	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
-  let recipe = new Recipe();
-  recipe.receptCim = req.body.receptCim;
-        recipe.elkeszitesiIdo = req.body.elkeszitesiIdo;
-        recipe.kaloria = req.body.kaloria;
-        recipe.evszak = req.body.evszak;
-        recipe.unnep = req.body.unnep;
-        recipe.dieta = req.body.dieta;
-        recipe.menu = req.body.menu;
-        recipe.napszak = req.body.napszak;
-        recipe.technika = req.body.technika;
-        recipe.hozzavalok = req.body.hozzavalok;
-        recipe.elkeszites = req.body.elkeszites;
-		recipe.fileUrl = req.body.fileUrl;
-		recipe.fileID = req.body.fileID;
+  let recipe = new Recipe(req.body);
   recipe.save()
     .then(recipe => {
       res.status(200).json({'recipe': 'recipe in added successfully'});
@@ -67,7 +55,7 @@ recipeRoutes.route('/add').post(function (req, res) {
 
 // Defined get data(index or listing) route
 recipeRoutes.route('/').get(function (req, res) {
-	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
+	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
     Recipe.find(function(err, recipes){
@@ -84,7 +72,7 @@ recipeRoutes.route('/').get(function (req, res) {
 
 // Defined edit route
 recipeRoutes.route('/edit/:id').get(function (req, res) {
-	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
+	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
   let id = req.params.id;
@@ -96,7 +84,7 @@ recipeRoutes.route('/edit/:id').get(function (req, res) {
 
 //  Defined update route
 recipeRoutes.route('/update/:id').post(function (req, res) {
-	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
+	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
     Recipe.findById(req.params.id, function(err, recipe) {
@@ -131,7 +119,7 @@ recipeRoutes.route('/update/:id').post(function (req, res) {
 
 // Defined delete | remove | destroy route
 recipeRoutes.route('/delete/:id').get(function (req, res) {
-	if(req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
+	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
     Recipe.findByIdAndRemove({_id: req.params.id}, function(err, recipe){
