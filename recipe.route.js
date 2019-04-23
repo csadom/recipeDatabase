@@ -60,7 +60,7 @@ recipeRoutes.route('/').get(function (req, res) {
 				console.log(tokens.get(req.body.user));
 				console.log(req.query);
 				console.log(req.params);
-	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
+	if(!req.query.token.localeCompare(tokens.get(req.query.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
     Recipe.find(function(err, recipes){
