@@ -52,6 +52,12 @@ recipeRoutes.route('/add').post(function (req, res) {
 
 // Defined get data(index or listing) route
 recipeRoutes.route('/').get(function (req, res) {
+	console.log("WWWWWWWWW");
+	console.log(req);
+		console.log(req.body);
+			console.log(req.body.token);
+				console.log(req.body.user);
+				console.log(tokens.get(req.body.user));
 	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
