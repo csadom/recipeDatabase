@@ -58,6 +58,7 @@ recipeRoutes.route('/').get(function (req, res) {
 			console.log(req.body.token);
 				console.log(req.body.user);
 				console.log(tokens.get(req.body.user));
+				console.log(req.query);
 	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
