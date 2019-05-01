@@ -3,10 +3,14 @@ const Schema = mongoose.Schema;
 
 // Define collection and schema for Recipe
 let Recipe = new Schema({
+	user: String,
+	numberOfPeople: Number,
+	date: String,
 	fileUrl: String,
 	fileID: String,
 	receptCim: String,
 	elkeszitesiIdo: Number,
+	elokeszitesiIdo: Number,
 	kaloria: Number,
 	evszak: [String],
 	unnep: [String],
@@ -21,7 +25,8 @@ let Recipe = new Schema({
 				{
 					name: String,
 					mennyiseg: String,
-					mertekegyseg: String	
+					mertekegyseg: String,
+					kaloria: String
 				},
 				]
 		}
