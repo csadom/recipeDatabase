@@ -56,14 +56,14 @@ recipeRoutes.route('/add').post(function (req, res) {
 		}else{
 			
 			
-			 Group.findById(req.body.gorupID, function(err, group) {
+			 Group.findById(new ObjectId(req.body.gorupID), function(err, group) {
 					if (!group)
 					  res.status(404).send("data is not found");
 					else {
 						group.recipes.push(
-							{id: req.body.id, tag:req.body.tag}
+							{id: recipe._id, tag:req.body.tag}
 						);
-						group.save().then(recipe => {
+						group.save().then(rec => {
 						  res.status(200).json('Update complete')
 						  })
 					  .catch(err => {
