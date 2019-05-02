@@ -68,7 +68,7 @@ recipeRoutes.route('/add').post(function (req, res) {
 					}
 					else {
 						group.recipes.push(
-							new ObjectId(recipe._id)
+							new mongoose.mongo.ObjectId(recipe._id)
 						);
 						console.log(group);
 						group.save().then(rec => {
