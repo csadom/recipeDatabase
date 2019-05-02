@@ -4,6 +4,7 @@ var sha256 = require('js-sha256');
 
 // Require Recipe model in our routes module
 let Recipe = require('./recipe.model');
+let Group = require('./group.model');
 const userPsw = new Map();
 userPsw.set('orsi','bbe7c9d4c4bc2326e3e6b9ee0bd7b555122ace1fa83bfee955e5c6305ee81844');
 const tokens = new Map();
@@ -41,8 +42,40 @@ recipeRoutes.route('/add').post(function (req, res) {
 	}else{
   let recipe = new Recipe(req.body);
   recipe.save()
-    .then(recipe => {
-      res.status(200).json({'recipe': 'recipe in added successfully'});
+    .then(() => {
+		if(req.body.gorupID === undefined){
+			let group = new Group();
+			group.recipes[0] = {id: req.body.id, tag:req.body.tag};
+			group.save()
+				.then(()=> res.status(200).json({'recipe': 'recipe in added successfully'}))
+				.catch(err => {
+				res.status(400).send("unable to save to database");
+				});
+		}else{
+			
+			
+			 Group.findById(req.body.gorupID, function(err, group) {
+					if (!group)
+					  res.status(404).send("data is not found");
+					else {
+						group.recipes.push(
+							{id: req.body.id, tag:req.body.tag}
+						);
+						group.save().then(recipe => {
+						  res.status(200).json('Update complete')
+						  })
+					  .catch(err => {
+							res.status(400).send("unable to update the database")}
+							)
+					}
+			 });
+			
+			
+			
+			
+			
+		
+		}
     })
     .catch(err => {
     res.status(400).send("unable to save to database");
@@ -52,14 +85,7 @@ recipeRoutes.route('/add').post(function (req, res) {
 
 // Defined get data(index or listing) route
 recipeRoutes.route('/').get(function (req, res) {
-	console.log("WWWWWWWWW");
-	console.log(req);
-		console.log(req.body);
-			console.log(req.body.token);
-				console.log(req.body.user);
-				console.log(tokens.get(req.body.user));
-				console.log(req.query);
-				console.log(req.params);
+
 	if(!req.query.token.localeCompare(tokens.get(req.query.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
