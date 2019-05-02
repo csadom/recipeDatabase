@@ -41,9 +41,11 @@ recipeRoutes.route('/add').post(function (req, res) {
 		res.status(401).send("auth error");
 	}else{
   let recipe = new Recipe(req.body);
+  console.log(req.body);
   recipe.save()
     .then((recipe) => {
-		if(req.body.gorupID === undefined){
+		if(req.body.groupID === undefined){
+			console.log("WWW");
 			let group = new Group();
 			group.recipes[0] = {id: recipe._id, tag:req.body.tag};
 			group.save()
