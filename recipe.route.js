@@ -49,32 +49,36 @@ recipeRoutes.route('/add').post(function (req, res) {
 			let group = new Group();
 			group.recipes[0] = {id: recipe._id, tag:req.body.tag};
 			group.save()
-				.then(()=> res.status(200).json({'recipe': 'recipe in added successfully'}))
-				.catch(err => {
-				res.status(400).send("unable to save to database");
-				});
-		}else{
-			console.log("1: "+req.body.groupID);
-			
-			 Group.findById( req.body.groupID, function(err, group) {
-				 console.log("2");
-					if (!group){
-						console.log("3");
-					  res.status(404).send("data is not found");
-					}
-					else {
-						console.log("4");
-						group.recipes.push(
-							{id: recipe._id, tag:req.body.tag}
-						);
-						console.log("5");
-						console.log(group);
-						group.save().then(rec => {
-							console.log("6");
+				.then((group)=> {
+						recipe.groupID=group._id;
+						recipe.save().then(rec => {
 						  res.status(200).json('Update complete')
 						  })
 					  .catch(err => {
-						  console.log("7");
+							res.status(400).send("unable to update the database")}
+							)
+					res.status(200).json({'recipe': 'recipe in added successfully'})})
+				.catch(err => {
+				res.status(400).send("unable to save to database");
+				});
+		}else{			
+			 Group.findById( req.body.groupID, function(err, group) {
+					if (!group){
+					  res.status(404).send("data is not found");
+					}
+					else {
+						group.recipes.push(
+							{id: recipe._id, tag:req.body.tag}
+						);
+						console.log(group);
+						group.save().then(rec => {
+							
+												
+							
+						
+						  res.status(200).json('Update complete')
+						  })
+					  .catch(err => {
 							res.status(400).send("unable to update the database")}
 							)
 					}
