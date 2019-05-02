@@ -4,10 +4,7 @@ const Schema = mongoose.Schema;
 // Define collection and schema for Recipe
 let Group = new Schema({
 	recipes: [
-		{
-			id:String,
-			tag: String
-		}
+			id:String
 	]
 },{
     collection: 'groups'
