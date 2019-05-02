@@ -54,9 +54,9 @@ recipeRoutes.route('/add').post(function (req, res) {
 				res.status(400).send("unable to save to database");
 				});
 		}else{
-			console.log("1: "+req.body.gorupID);
+			console.log("1: "+req.body.groupID);
 			
-			 Group.findById( req.body.gorupID, function(err, group) {
+			 Group.findById( req.body.groupID, function(err, group) {
 				 console.log("2");
 					if (!group){
 						console.log("3");
