@@ -54,20 +54,26 @@ recipeRoutes.route('/add').post(function (req, res) {
 				res.status(400).send("unable to save to database");
 				});
 		}else{
-			
+			console.log("1");
 			
 			 Group.findById(new ObjectId(req.body.gorupID), function(err, group) {
+				 console.log("2");
 					if (!group)
+						console.log("3");
 					  res.status(404).send("data is not found");
 					else {
+						console.log("4");
 						group.recipes.push(
 							{id: recipe._id, tag:req.body.tag}
 						);
+						console.log("5");
 						console.log(group);
 						group.save().then(rec => {
+							console.log("6");
 						  res.status(200).json('Update complete')
 						  })
 					  .catch(err => {
+						  console.log("7");
 							res.status(400).send("unable to update the database")}
 							)
 					}
