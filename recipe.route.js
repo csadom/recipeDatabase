@@ -42,10 +42,10 @@ recipeRoutes.route('/add').post(function (req, res) {
 	}else{
   let recipe = new Recipe(req.body);
   recipe.save()
-    .then(() => {
+    .then((recipe) => {
 		if(req.body.gorupID === undefined){
 			let group = new Group();
-			group.recipes[0] = {id: req.body.id, tag:req.body.tag};
+			group.recipes[0] = {id: recipe._id, tag:req.body.tag};
 			group.save()
 				.then(()=> res.status(200).json({'recipe': 'recipe in added successfully'}))
 				.catch(err => {
