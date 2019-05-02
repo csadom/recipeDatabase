@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 // Define collection and schema for Recipe
 let Recipe = new Schema({
+	tag: String,
 	groupID: String,
 	user: String,
 	numberOfPeople: Number,
