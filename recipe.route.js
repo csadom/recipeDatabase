@@ -47,7 +47,7 @@ recipeRoutes.route('/add').post(function (req, res) {
 		if(req.body.groupID === undefined){
 			console.log("WWW");
 			let group = new Group();
-			group.recipes[0] = recipe._id;
+			group.recipes[0] = recipe._id.toString();
 			group.save()
 				.then((group)=> {
 						recipe.groupID=group._id;
@@ -68,7 +68,7 @@ recipeRoutes.route('/add').post(function (req, res) {
 					}
 					else {
 						group.recipes.push(
-							new mongoose.mongo.ObjectId(recipe._id)
+							recipe._id
 						);
 						console.log(group);
 						group.save().then(rec => {
