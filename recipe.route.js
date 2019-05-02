@@ -58,9 +58,10 @@ recipeRoutes.route('/add').post(function (req, res) {
 			
 			 Group.findById(new ObjectId(req.body.gorupID), function(err, group) {
 				 console.log("2");
-					if (!group)
+					if (!group){
 						console.log("3");
 					  res.status(404).send("data is not found");
+					}
 					else {
 						console.log("4");
 						group.recipes.push(
