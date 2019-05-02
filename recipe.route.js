@@ -68,7 +68,7 @@ recipeRoutes.route('/add').post(function (req, res) {
 					}
 					else {
 						group.recipes.push(
-							recipe._id
+							new ObjectId(recipe._id)
 						);
 						console.log(group);
 						group.save().then(rec => {
