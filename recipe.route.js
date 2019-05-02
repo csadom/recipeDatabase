@@ -63,6 +63,7 @@ recipeRoutes.route('/add').post(function (req, res) {
 						group.recipes.push(
 							{id: recipe._id, tag:req.body.tag}
 						);
+						console.log(group);
 						group.save().then(rec => {
 						  res.status(200).json('Update complete')
 						  })
