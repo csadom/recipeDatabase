@@ -45,7 +45,6 @@ recipeRoutes.route('/add').post(function (req, res) {
   recipe.save()
     .then((recipe) => {
 		if(req.body.groupID === undefined){
-			console.log("WWW");
 			let group = new Group();
 			group.recipes[0] = recipe._id.toString();
 			group.save()
@@ -136,6 +135,10 @@ recipeRoutes.route('/update/:id').post(function (req, res) {
     if (!recipe)
       res.status(404).send("data is not found");
     else {
+		recipe.user =  req.body.user;
+		recipe.date =  req.body. date;
+		recipe.numberOfPeople =  req.body.numberOfPeople;
+		recipe.tag =  req.body.tag;
         recipe.receptCim = req.body.receptCim;
         recipe.elkeszitesiIdo = req.body.elkeszitesiIdo;
         recipe.kaloria = req.body.kaloria;
@@ -147,11 +150,12 @@ recipeRoutes.route('/update/:id').post(function (req, res) {
         recipe.technika = req.body.technika;
         recipe.hozzavalok = req.body.hozzavalok;
         recipe.elkeszites = req.body.elkeszites;
+        recipe.elokeszitesiIdo = req.body.elokeszitesiIdo;
 		recipe.fileUrl = req.body.fileUrl;
 		recipe.fileID = req.body.fileID;
 
         recipe.save().then(recipe => {
-          res.json('Update complete');
+           res.status(200).json('Update complete')
       })
       .catch(err => {
             res.status(400).send("unable to update the database");
