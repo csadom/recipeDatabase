@@ -127,7 +127,11 @@ recipeRoutes.route('/edit/:id').get(function (req, res) {
 });
 
 //  Defined update route
-recipeRoutes.route('/update/:id').post(function (req, res) {
+recipeRoutes.route('/update/:id').put(function (req, res) {
+	console.log("req.params.id");
+	console.log(req.params.id);
+	console.log("req");
+	console.log(req);
 	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
