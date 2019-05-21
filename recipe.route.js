@@ -131,16 +131,19 @@ recipeRoutes.route('/update/:id').put(function (req, res) {
 	console.log("req.params.id");
 	console.log(req.params.id);
 	console.log("req");
-	console.log(req);
+	console.log(req.body);
 	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
     Recipe.findById(req.params.id, function(err, recipe) {
-    if (!recipe)
+    if (!recipe){
+		console.log("NOT FOUND")
       res.status(404).send("data is not found");
+	}
     else {
+		console.log("FOUND")
 		recipe.user =  req.body.user;
-		recipe.date =  req.body. date;
+		recipe.date =  req.body.date;
 		recipe.numberOfPeople =  req.body.numberOfPeople;
 		recipe.tag =  req.body.tag;
         recipe.receptCim = req.body.receptCim;
@@ -157,11 +160,12 @@ recipeRoutes.route('/update/:id').put(function (req, res) {
         recipe.elokeszitesiIdo = req.body.elokeszitesiIdo;
 		recipe.fileUrl = req.body.fileUrl;
 		recipe.fileID = req.body.fileID;
-
+		console.log("WW")
         recipe.save().then(recipe => {
            res.status(200).json('Update complete')
       })
       .catch(err => {
+		  console.log("ERR: " + err)
             res.status(400).send("unable to update the database");
       });
     }
