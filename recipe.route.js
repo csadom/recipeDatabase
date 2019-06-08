@@ -128,20 +128,15 @@ recipeRoutes.route('/edit/:id').get(function (req, res) {
 
 //  Defined update route
 recipeRoutes.route('/update/:id').put(function (req, res) {
-	console.log("req.params.id");
-	console.log(req.params.id);
-	console.log("req");
-	console.log(req.body);
+
 	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
     Recipe.findById(req.params.id, function(err, recipe) {
     if (!recipe){
-		console.log("NOT FOUND")
       res.status(404).send("data is not found");
 	}
     else {
-		console.log("FOUND")
 		recipe.user =  req.body.user;
 		recipe.date =  req.body.date;
 		recipe.numberOfPeople =  req.body.numberOfPeople;
@@ -160,7 +155,6 @@ recipeRoutes.route('/update/:id').put(function (req, res) {
         recipe.elokeszitesiIdo = req.body.elokeszitesiIdo;
 		recipe.fileUrl = req.body.fileUrl;
 		recipe.fileID = req.body.fileID;
-		console.log("WW")
         recipe.save().then(recipe => {
            res.status(200).json('Update complete')
       })
@@ -185,5 +179,37 @@ recipeRoutes.route('/delete/:id').get(function (req, res) {
     });
 	}
 });
+
+
+// Search text
+recipeRoutes.route('/').get(function (req, res) {
+
+	if(!req.query.token.localeCompare(tokens.get(req.query.user)) === 0){
+		res.status(401).send("auth error");
+	}else{
+		let searchTexts = req.body.searchTexts;
+		console.log(searchTexts);
+		let tmp = searchTexts[0];
+		console.log(tmp);
+		Recipe.find({
+		  $text: { $search: tmp },
+		})
+		  .then(products => console.log(products))
+		  .catch(e => console.error(e));
+		
+		/*
+    Recipe.find(function(err, recipes){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(recipes);
+    }
+	
+  });
+  */
+	}
+});
+
 
 module.exports = recipeRoutes;
