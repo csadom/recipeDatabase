@@ -182,7 +182,7 @@ recipeRoutes.route('/delete/:id').get(function (req, res) {
 
 
 // Search text
-recipeRoutes.route('/').get(function (req, res) {
+recipeRoutes.route('/recipes').get(function (req, res) {
 
 	if(!req.query.token.localeCompare(tokens.get(req.query.user)) === 0){
 		res.status(401).send("auth error");
