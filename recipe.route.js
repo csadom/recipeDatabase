@@ -184,7 +184,7 @@ recipeRoutes.route('/delete/:id').get(function (req, res) {
 // Search text
 recipeRoutes.route('/recipes').get(function (req, res) {
 
-	if(!req.query.token.localeCompare(tokens.get(req.query.user)) === 0){
+	if(!req.body.token.localeCompare(tokens.get(req.body.user)) === 0){
 		res.status(401).send("auth error");
 	}else{
 		let searchTexts = req.body.searchTexts;
@@ -194,20 +194,11 @@ recipeRoutes.route('/recipes').get(function (req, res) {
 		Recipe.find({
 		  $text: { $search: tmp },
 		})
-		  .then(products => console.log(products))
-		  .catch(e => console.error(e));
+		  .then(products => {console.log(products);  res.json(recipes);})
+		  .catch(e => {console.error(e);
+		  res.status(402).send("search error");});
 		
-		/*
-    Recipe.find(function(err, recipes){
-    if(err){
-      console.log(err);
-    }
-    else {
-      res.json(recipes);
-    }
-	
-  });
-  */
+
 	}
 });
 
